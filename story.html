@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Journey</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3a86ff;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3a86ff;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #3a86ff;
+        }
+        
+        .nav-links a:hover:before {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: #555;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3a86ff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-btn {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        /* Section Styles */
+        .section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: #3a86ff;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        /* Image Gallery Section */
+        .gallery {
+            background-color: #f0f4f8;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            aspect-ratio: 3/2;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gallery-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Adventure Showcase */
+        .showcase {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6rem;
+        }
+        
+        .showcase:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .showcase-image {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .showcase-image img {
+            width: 100%;
+            height: auto;
+            vertical-align: middle;
+            transition: transform 0.6s ease;
+        }
+        
+        .showcase-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .showcase-content {
+            flex: 1;
+            padding: 0 2rem;
+            min-width: 300px;
+        }
+        
+        .showcase-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .showcase-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #3a86ff;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2b6ad9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 4rem 5% 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .footer-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column {
+            flex-basis: 20%;
+            min-width: 200px;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h4 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-column h4:after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: #3a86ff;
+            bottom: -8px;
+            left: 0;
+            border-radius: 1.5px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .social-links li {
+            margin-right: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #3a4556;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: #3a86ff;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5568;
+        }
+        
+        .footer-bottom p {
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media screen and (max-width: 1024px) {
+            .section {
+                padding: 4rem 5%;
+            }
+            
+            .showcase-content {
+                padding: 0 1rem;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .nav-links {
+                position: fixed;
+                background-color: white;
+                height: 100vh;
+                width: 70%;
+                top: 0;
+                right: -100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: right 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .showcase {
+                flex-direction: column !important;
+                margin-bottom: 4rem;
+            }
+            
+            .showcase-image {
+                margin-bottom: 2rem;
+                max-width: 100%;
+            }
+            
+            .showcase-content {
+                padding: 0;
+            }
+            
+            .footer-column {
+                flex-basis: 45%;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-btn {
+                padding: 0.8rem 2rem;
+            }
+            
+            .section {
+                padding: 3rem 5%;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
+            }
+            
+            .footer-column {
+                flex-basis: 100%;
+            }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .modal-img {
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">AdventureQuest</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#adventures">Adventures</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <img src="/api/placeholder/1600/900" alt="Hero Image" class="hero-image" id="image1">
+        <div class="hero-content">
+            <h1>Embark on a Magical Adventure</h1>
+            <p>Discover hidden worlds full of wonder and excitement with our young adventurer</p>
+            <a href="#adventures" class="hero-btn">Begin Journey</a>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery">
+        <h2 class="section-title fade-in">Adventure Gallery</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image2">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Forest Discovery</h3>
+                    <p>Exploring the magical forest with rabbit friends</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image3">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Grand Vistas</h3>
+                    <p>Witnessing breathtaking landscapes and distant horizons</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image4">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Bear Encounter</h3>
+                    <p>Making friends with the gentle giants of the forest</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image5">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Feathered Friends</h3>
+                    <p>Learning the wisdom of the forest from clever ravens</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image6">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Eastern Wonders</h3>
+                    <p>Discovering ancient temples and mystical places</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/600/400" alt="Adventure Image" class="gallery-image" id="image7">
+                <div class="gallery-overlay">
+                    <h3 class="gallery-title">Hidden Caves</h3>
+                    <p>Venturing into magical caverns filled with glowing butterflies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adventures Section -->
+    <section id="adventures" class="section">
+        <h2 class="section-title fade-in">Memorable Adventures</h2>
+        <div class="showcase fade-in">
+            <div class="showcase-image">
+                <img src="/api/placeholder/600/400" alt="Showcase Image" id="image8">
+            </div>
+            <div class="showcase-content">
+                <h3>The Butterfly Valley</h3>
+                <p>Join our young explorer as he discovers a hidden valley filled with magical butterflies. Each butterfly has its own story to tell and special powers to share. The valley is protected by ancient guardians and only the pure of heart may enter.</p>
+                <p>Through courage and kindness, our adventurer learns the secrets of the valley and forms lifelong bonds with its inhabitants.</p>
+                <a href="#" class="btn">Read Story</a>
+            </div>
+        </div>
+        <div class="showcase fade-in">
+            <div class="showcase-image">
+                <img src="/api/placeholder/600/400" alt="Showcase Image" id="image9">
+            </div>
+            <div class="showcase-content">
+                <h3>The Explorer's Map</h3>
+                <p>Adventure awaits as our clever duo discovers an ancient map leading to untold wonders. With their matching explorer outfits and boundless curiosity, they decipher clues and overcome obstacles that have stumped adventurers for generations.</p>
+                <p>Along their journey, they'll learn that the greatest treasure isn't gold or jewels, but the friendship they strengthen along the way.</p>
+                <a href="#" class="btn">Begin Quest</a>
+            </div>
+        </div>
+        <div class="showcase fade-in">
+            <div class="showcase-image">
+                <img src="/api/placeholder/600/400" alt="Showcase Image" id="image10">
+            </div>
+            <div class="showcase-content">
+                <h3>Mountain Passages</h3>
+                <p>High above the clouds, where waterfalls cascade down ancient cliffs, our adventurer discovers a hidden path few have ever traveled. With his loyal bunny companion by his side, he navigates treacherous terrain and breathtaking vistas.</p>
+                <p>This journey will test his courage and determination, revealing strengths he never knew he possessed as he uncovers the mysteries of the mountain passages.</p>
+                <a href="#" class="btn">Explore Path</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section" style="background-color: #f0f4f8;">
+        <h2 class="section-title fade-in">About Our Adventures</h2>
+        <div class="showcase fade-in">
+            <div class="showcase-content">
+                <h3>The Story Behind AdventureQuest</h3>
+                <p>AdventureQuest was born from a passion for storytelling and a belief in the power of imagination. We create immersive visual tales that transport viewers to magical worlds where anything is possible.</p>
+                <p>Our young adventurer and his animal companions embark on journeys that inspire courage, kindness, and curiosity. Each adventure is carefully crafted to capture the wonder of childhood exploration while teaching valuable life lessons.</p>
+                <p>Join us as we continue to expand our universe of adventure, bringing new characters, locations, and stories to life.</p>
+                <a href="#" class="btn">Our Mission</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title fade-in">Join the Adventure</h2>
+        <div class="showcase fade-in">
+            <div class="showcase-content">
+                <h3>Stay Updated</h3>
+                <p>Want to be the first to know about new adventures? Subscribe to our newsletter for exclusive stories, artwork, and updates.</p>
+                <form id="contact-form">
+                    <div style="display: flex; margin-bottom: 1rem; max-width: 500px;">
+                        <input type="email" placeholder="Your email address" style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px 0 0 4px; outline: none;">
+                        <button type="submit" class="btn" style="border-radius: 0 4px 4px 0; margin: 0;">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <h4>AdventureQuest</h4>
+                    <p>Bringing magical adventures to life through captivating visuals and heartwarming stories.</p>
+                    <ul class="social-links">
+                        <li><a href="#"><i class="fab fa-facebook-f">f</i></a></li>
+                        <li><a href="#"><i class="fab fa-twitter">t</i></a></li>
+                        <li><a href="#"><i class="fab fa-instagram">i</i></a></li>
+                        <li><a href="#"><i class="fab fa-youtube">y</i></a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#adventures">Adventures</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Adventures</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">The Butterfly Valley</a></li>
+                        <li><a href="#">The Explorer's Map</a></li>
+                        <li><a href="#">Mountain Passages</a></li>
+                        <li><a href="#">Forest Discovery</a></li>
+                        <li><a href="#">Eastern Wonders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="footer-links">
+                        <li>Email: info@adventurequest.com</li>
+                        <li>Phone: +1 (555) 123-4567</li>
+                        <li>Address: 1234 Wonder Lane, Imagination City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AdventureQuest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Image Popup -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-img" id="modal-image">
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Navigation Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('toggle');
+        });
+        
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70, // Offset for fixed navbar
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('toggle');
+                }
+            });
+        });
+        
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+        
+        // Fade-in Animation on Scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        function checkFade() {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                const isVisible = (elementTop < window.innerHeight - 100) && (elementBottom > 0);
+                
+                if (isVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        // Initial check on page load
+        window.addEventListener('load', checkFade);
+        
+        // Check fade on scroll
+        window.addEventListener('scroll', checkFade);
+        
+        // Image Modal Functionality
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modal-image');
+        const closeModal = document.querySelector('.close-modal');
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        
+        galleryImages.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.style.display = 'block';
+                modalImg.src = this.src;
+            });
+        });
+        
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Replace placeholder images with actual image IDs
+        document.getElementById('image1').src = '/api/placeholder/1600/900';
+        document.getElementById('image2').src = '/api/placeholder/600/400';
+        document.getElementById('image3').src = '/api/placeholder/600/400';
+        document.getElementById('image4').src = '/api/placeholder/600/400';
+        document.getElementById('image5').src = '/api/placeholder/600/400';
+        document.getElementById('image6').src = '/api/placeholder/600/400';
+        document.getElementById('image7').src = '/api/placeholder/600/400';
+        document.getElementById('image8').src = '/api/placeholder/600/400';
+        document.getElementById('image9').src = '/api/placeholder/600/400';
+        document.getElementById('image10').src = '/api/placeholder/600/400';
+        
+        // Form submission handler (prevent default)
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for subscribing to our adventures!');
+            contactForm.reset();
+        });
+    </script>
+</body>
+</html>
